@@ -1,12 +1,12 @@
 'use client'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-const CATEGORIES = ['All Crops','Vegetables','Cereals','Pulses','Spices','Fruits']
-const RANGES     = ['Today','This Week','Monthly']
+const CATEGORIES = ['All Crops', 'Vegetables', 'Fruits', 'Spices', 'Cereals', 'Pulses']
+const RANGES     = ['Today', 'This Week', 'Monthly']
 
-export default function FilterBar({ states=[], activeState, activeCategory, activeRange }) {
+export default function FilterBar({ states = [], activeState, activeCategory, activeRange }) {
   const router = useRouter()
-  const sp     = useSearchParams()
+  const sp = useSearchParams()
 
   function push(key, val) {
     const p = new URLSearchParams(sp.toString())
