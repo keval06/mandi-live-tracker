@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import {
-  getAllStateTotals,
   getFirstPage,
   getPricesByMandi,
   getTopMovers,
   filterByRange,
 } from "@/lib/api/mandi.js";
+import { getCachedStateRecords, getCachedStateTotals } from "@/lib/api/mandi-cached.js";
 import {
   normalizeRecords,
   groupByCommodity,
@@ -15,7 +15,6 @@ import FilterBar from "@/components/FilterBar";
 import PriceCard from "@/components/PriceCard";
 import PriceTable from "@/components/PriceTable";
 import TrendChart from "@/components/TrendChart";
-import TopMovers from "@/components/TopMovers";
 import StateSelector from "@/components/StateSelector";
 import MandiSelector from "@/components/MandiSelector";
 
@@ -91,7 +90,7 @@ export default async function DashboardPage({ searchParams }) {
   const range = sp?.range || "This Week";
 
   // Always cheap — 33 requests batched, cached
-  const stateTotals = await getAllStateTotals();
+  const stateTotals = await getCachedStateTotals();
   const states = stateTotals.map((s) => s.state);
   const totalNation = stateTotals.reduce((s, st) => s + st.total, 0);
 
@@ -121,7 +120,17 @@ export default async function DashboardPage({ searchParams }) {
 
   // State selected, no mandi yet — 1 cheap request to get mandi list + preview
   if (!mandi) {
-    const { records: firstRecords, total, mandis } = await getFirstPage(state);
+    // Use cached full state fetch to get ALL mandis, not just first page
+    const [{ records: allRecords, total }, { records: firstRecords }] = await Promise.all([
+      getCachedStateRecords(state),
+      getFirstPage(state),
+    ]);
+    const mandiCounts = {};
+    for (const r of allRecords) {
+      if (!r.market) continue;
+      mandiCounts[r.market] = (mandiCounts[r.market] || 0) + 1;
+    }
+    const mandis = Object.keys(mandiCounts).sort();
     const statInfo = stateTotals.find((s) => s.state === state);
 
     return (
@@ -143,7 +152,7 @@ export default async function DashboardPage({ searchParams }) {
         </div>
 
         {/* Mandi picker — clicking navigates to ?state=X&mandi=Y */}
-        <MandiSelector state={state} mandis={mandis} totalMandis={total} />
+        <MandiSelector state={state} mandis={mandis} mandiCounts={mandiCounts} totalRecords={total} />
 
         {/* Preview — first 10 records while user picks */}
         {firstRecords.length > 0 && (
