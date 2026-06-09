@@ -97,7 +97,7 @@ export default async function DashboardPage({ searchParams }) {
   // No state selected — show landing
   if (!state) {
     return (
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <div className="bg-white border border-gray-100 rounded-lg px-5 py-5 mb-6">
           <div className="inline-flex items-center gap-1.5 bg-green-50 border border-green-100 rounded-full px-2.5 py-1 mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-[#22863a] animate-pulse" />
@@ -134,7 +134,7 @@ export default async function DashboardPage({ searchParams }) {
     const statInfo = stateTotals.find((s) => s.state === state);
 
     return (
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <div className="bg-white border border-gray-100 rounded-lg px-5 py-4 mb-4">
           <div className="flex items-center gap-2 mb-1">
             <a
@@ -205,9 +205,9 @@ export default async function DashboardPage({ searchParams }) {
   const statInfo = stateTotals.find((s) => s.state === state);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
       {/* Hero */}
-      <div className="bg-white border border-gray-100 rounded-lg px-5 py-4 mb-3 flex justify-between items-center flex-wrap gap-3">
+      <div className="bg-white border border-gray-100 rounded-lg px-4 sm:px-5 py-4 mb-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <a
@@ -273,7 +273,7 @@ export default async function DashboardPage({ searchParams }) {
 
       {/* Top 3 cards */}
       {cardRecords.length > 0 ? (
-        <div className="grid grid-cols-3 gap-2 mb-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
           {cardRecords.map((r, i) => (
             <PriceCard key={i} record={r} />
           ))}

@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 
 const links = [
   { href: '/',        label: 'Dashboard' },
@@ -10,10 +11,11 @@ const links = [
 
 export default function Navbar() {
   const path = usePathname()
+  const [open, setOpen] = useState(false)
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-white border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
 
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2">
@@ -21,7 +23,7 @@ export default function Navbar() {
           <span className="text-sm font-medium text-gray-900 tracking-tight">MandiTrack</span>
         </Link>
 
-        {/* Links */}
+        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-6">
           {links.map(l => (
             <Link
@@ -38,14 +40,53 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* CTA */}
-        <Link
-          href="/"
-          className="text-xs bg-[#22863a] text-white px-3 py-1.5 rounded hover:bg-[#1a6b2e] transition-colors"
-        >
-          Set Alert
-        </Link>
+        {/* Right side */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="/"
+            className="hidden sm:inline-flex text-xs bg-[#22863a] text-white px-3 py-1.5 rounded hover:bg-[#1a6b2e] transition-colors"
+          >
+            Set Alert
+          </Link>
+          {/* Hamburger — mobile only */}
+          <button
+            className="md:hidden flex flex-col gap-1 p-1"
+            onClick={() => setOpen(o => !o)}
+            aria-label="Toggle menu"
+          >
+            <span className={`block w-5 h-0.5 bg-gray-600 transition-all ${open ? 'rotate-45 translate-y-1.5' : ''}`} />
+            <span className={`block w-5 h-0.5 bg-gray-600 transition-all ${open ? 'opacity-0' : ''}`} />
+            <span className={`block w-5 h-0.5 bg-gray-600 transition-all ${open ? '-rotate-45 -translate-y-1.5' : ''}`} />
+          </button>
+        </div>
       </div>
+
+      {/* Mobile dropdown */}
+      {open && (
+        <div className="md:hidden border-t border-gray-100 bg-white px-4 py-3 flex flex-col gap-3">
+          {links.map(l => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className={`text-sm py-1 transition-colors ${
+                path === l.href
+                  ? 'text-[#22863a] font-medium'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              {l.label}
+            </Link>
+          ))}
+          <Link
+            href="/"
+            onClick={() => setOpen(false)}
+            className="text-xs bg-[#22863a] text-white px-3 py-1.5 rounded w-fit hover:bg-[#1a6b2e] transition-colors"
+          >
+            Set Alert
+          </Link>
+        </div>
+      )}
     </nav>
   )
 }

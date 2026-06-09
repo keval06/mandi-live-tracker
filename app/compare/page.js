@@ -47,14 +47,14 @@ export default async function ComparePage({ searchParams }) {
 
   if (!state) {
     return (
-      <div className="max-w-5xl mx-auto px-6 py-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
         <h1 className="text-lg font-medium text-gray-900 mb-1">
           Compare commodities
         </h1>
         <p className="text-xs text-gray-400 mb-5">
           Select a state to load commodities
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
           {stateTotals.map((s) => (
             <a
               key={s.state}
@@ -93,7 +93,7 @@ export default async function ComparePage({ searchParams }) {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-6">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
       <div className="flex items-center gap-2 mb-4">
         <a
           href="/compare"
@@ -104,12 +104,12 @@ export default async function ComparePage({ searchParams }) {
         <h1 className="text-lg font-medium text-gray-900">Compare · {state}</h1>
       </div>
 
-      <form className="flex items-center gap-3 mb-6">
+      <form className="flex flex-wrap items-center gap-3 mb-6">
         <input type="hidden" name="state" value={state} />
         <select
           name="c1"
           defaultValue={sel1}
-          className="text-xs border border-gray-200 rounded px-3 py-1.5 bg-white text-gray-700 outline-none"
+          className="text-xs border border-gray-200 rounded px-3 py-1.5 bg-white text-gray-700 outline-none flex-1 min-w-[140px]"
         >
           {commodities.map((c) => (
             <option key={c}>{c}</option>
@@ -119,7 +119,7 @@ export default async function ComparePage({ searchParams }) {
         <select
           name="c2"
           defaultValue={sel2}
-          className="text-xs border border-gray-200 rounded px-3 py-1.5 bg-white text-gray-700 outline-none"
+          className="text-xs border border-gray-200 rounded px-3 py-1.5 bg-white text-gray-700 outline-none flex-1 min-w-[140px]"
         >
           {commodities.map((c) => (
             <option key={c}>{c}</option>
@@ -127,13 +127,13 @@ export default async function ComparePage({ searchParams }) {
         </select>
         <button
           type="submit"
-          className="text-xs bg-[#22863a] text-white px-4 py-1.5 rounded hover:bg-[#1a6b2e] transition-colors"
+          className="text-xs bg-[#22863a] text-white px-4 py-1.5 rounded hover:bg-[#1a6b2e] transition-colors w-full sm:w-auto"
         >
           Compare
         </button>
       </form>
 
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
         {[
           { c: sel1, s: stats(sel1) },
           { c: sel2, s: stats(sel2) },
@@ -166,7 +166,7 @@ export default async function ComparePage({ searchParams }) {
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <TrendChart
           commodity={sel1}
           data={buildTrend(records, sel1)}

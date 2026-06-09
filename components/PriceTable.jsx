@@ -12,15 +12,8 @@ const CATEGORY_PATTERNS = {
   Oilseeds:   /castor|mustard|groundnut|sunflower|soybean|sesamum|sesame|linseed|safflower|isabgul|soanf|suva|dill/i,
 }
 
-const CATEGORY_COLORS = {
-  Vegetables: 'bg-green-50 text-green-700',
-  Cereals:    'bg-yellow-50 text-yellow-700',
-  Pulses:     'bg-orange-50 text-orange-700',
-  Spices:     'bg-red-50 text-red-700',
-  Fruits:     'bg-purple-50 text-purple-700',
-  Oilseeds:   'bg-blue-50 text-blue-700',
-  Other:      'bg-gray-100 text-gray-500',
-}
+// Single neutral style for all categories — no rainbow colors
+const CATEGORY_STYLE = 'bg-gray-50 text-gray-500'
 
 function getCategory(commodity) {
   for (const [cat, pattern] of Object.entries(CATEGORY_PATTERNS)) {
@@ -41,7 +34,7 @@ const COLS = [
   { key: 'arrivalDate', label: 'Date'         },
 ]
 
-const GRID = 'grid grid-cols-[1.6fr_0.9fr_1.6fr_0.9fr_0.8fr_0.9fr_0.8fr_0.8fr]'
+const GRID = 'grid grid-cols-[1.2fr_0.8fr_1.1fr_0.8fr_0.8fr_0.9fr_0.8fr_0.7fr]'
 
 export default function PriceTable({ records = [] }) {
   const [sortKey, setSortKey] = useState('modalPrice')
@@ -96,14 +89,13 @@ export default function PriceTable({ records = [] }) {
           placeholder="Search commodity, mandi or state…"
           className="flex-1 text-xs text-gray-700 outline-none placeholder:text-gray-300"
         />
-        {/* Issue 2 fix: show per-page range, not just total */}
         <span className="text-[10px] text-gray-400">
           {filtered.length > 0 ? `${pageStart}–${pageEnd} of ${filtered.length}` : '0 records'}
         </span>
       </div>
 
-      {/* Header */}
-      <div className={`${GRID} px-4 py-2 bg-gray-50 border-b border-gray-100`}>
+      {/* Desktop Header — hidden on mobile */}
+      <div className={`hidden md:grid ${GRID} px-4 py-2 bg-gray-50 border-b border-gray-100`}>
         {COLS.map(c => (
           <button
             key={c.key}
@@ -126,21 +118,47 @@ export default function PriceTable({ records = [] }) {
       ) : paged.map((r, i) => {
         const cat = getCategory(r.commodity)
         return (
-          <div
-            key={i}
-            className={`${GRID} px-4 py-2.5 border-b border-gray-50 items-center hover:bg-gray-50/50 transition-colors last:border-0`}
-          >
-            <span className="text-xs font-medium text-gray-800 truncate pr-2">{r.commodity}</span>
-            {/* Issue 1 fix: category badge */}
-            <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded-full w-fit ${CATEGORY_COLORS[cat]}`}>
-              {cat}
-            </span>
-            <span className="text-xs text-gray-500 truncate pr-2">{r.market}</span>
-            <span className="text-xs text-gray-400 truncate">{r.state}</span>
-            <span className="text-xs text-gray-600">{formatRupee(r.minPrice)}</span>
-            <span className="text-xs font-medium text-[#22863a]">{formatRupee(r.modalPrice)}</span>
-            <span className="text-xs text-gray-600">{formatRupee(r.maxPrice)}</span>
-            <span className="text-[10px] text-gray-400">{formatDate(r.arrivalDate)}</span>
+          <div key={i} className="border-b border-gray-50 last:border-0">
+            {/* Desktop row */}
+            <div className={`hidden md:grid ${GRID} px-4 py-2.5 items-center hover:bg-gray-50/50 transition-colors`}>
+              <span className="text-xs font-medium text-gray-800 truncate pr-2">{r.commodity}</span>
+              <span className={`text-[11px] font-medium px-2 py-0.5 rounded w-fit ${CATEGORY_STYLE}`}>
+                {cat}
+              </span>
+              <span className="text-xs text-gray-500 truncate pr-2">{r.market}</span>
+              <span className="text-xs text-gray-400 truncate">{r.state}</span>
+              <span className="text-xs text-gray-600">{formatRupee(r.minPrice)}</span>
+              <span className="text-xs font-medium text-[#22863a]">{formatRupee(r.modalPrice)}</span>
+              <span className="text-xs text-gray-600">{formatRupee(r.maxPrice)}</span>
+              <span className="text-[11px] text-gray-400">{formatDate(r.arrivalDate)}</span>
+            </div>
+            {/* Mobile card */}
+            <div className="md:hidden px-4 py-3 hover:bg-gray-50/50 transition-colors">
+              <div className="flex items-start justify-between mb-1.5">
+                <div>
+                  <p className="text-xs font-medium text-gray-800">{r.commodity}</p>
+                  <p className="text-[10px] text-gray-400 mt-0.5">{r.market} · {r.state}</p>
+                </div>
+                <span className={`text-[10px] font-medium px-2 py-0.5 rounded shrink-0 ${CATEGORY_STYLE}`}>
+                  {cat}
+                </span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <p className="text-[9px] text-gray-400 uppercase tracking-wide">Min</p>
+                  <p className="text-xs text-gray-600">{formatRupee(r.minPrice)}</p>
+                </div>
+                <div>
+                  <p className="text-[9px] text-gray-400 uppercase tracking-wide">Modal</p>
+                  <p className="text-xs font-medium text-[#22863a]">{formatRupee(r.modalPrice)}</p>
+                </div>
+                <div>
+                  <p className="text-[9px] text-gray-400 uppercase tracking-wide">Max</p>
+                  <p className="text-xs text-gray-600">{formatRupee(r.maxPrice)}</p>
+                </div>
+              </div>
+              <p className="text-[9px] text-gray-300 mt-1.5">{formatDate(r.arrivalDate)}</p>
+            </div>
           </div>
         )
       })}

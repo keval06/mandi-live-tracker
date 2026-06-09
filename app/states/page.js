@@ -16,7 +16,7 @@ export default async function StatesPage({ searchParams }) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
       <h1 className="text-lg font-medium text-gray-900 mb-1">State-wise prices</h1>
       <p className="text-xs text-gray-400 mb-4">{stateTotals.length} states reporting today</p>
 
