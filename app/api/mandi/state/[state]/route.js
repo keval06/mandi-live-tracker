@@ -38,7 +38,7 @@ export async function GET(request, { params }) {
       }
     )
   } catch (e) {
-    console.error(`[Route] Failed for state=${state}:`, e.message)
+    console.error(`[Route] Failed for state=${state}:`, e.message, "[app/api/mandi/state/[state]/route.js]")
     return NextResponse.json({ error: e.message }, { status: 500 })
   }
 }
