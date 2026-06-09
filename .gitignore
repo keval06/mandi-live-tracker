@@ -3,3 +3,12 @@ node_modules
 .env
 .env.local
 .next
+scratch/*
+tempCodeRunnerFile.js
+test-api.mjs
+test-mandi-fetch.mjs
+visual.js
+test-mandi-pagination.mjs
+CODEBASE_FLOW.md 
+INTERVIEW_QA.md
+.vscode
