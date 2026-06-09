@@ -1,7 +1,7 @@
 'use client'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-const CATEGORIES = ['All Crops', 'Vegetables', 'Fruits', 'Spices', 'Cereals', 'Pulses']
+const CATEGORIES = ['All Crops', 'Vegetables', 'Fruits', 'Spices', 'Cereals', 'Pulses','Oilseeds']
 const RANGES     = ['Today', 'This Week', 'Monthly']
 
 export default function FilterBar({ states = [], activeState, activeCategory, activeRange }) {
