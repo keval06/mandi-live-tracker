@@ -34,7 +34,7 @@ const COLS = [
   { key: 'arrivalDate', label: 'Date'         },
 ]
 
-const GRID = 'grid grid-cols-[1.2fr_0.8fr_1.1fr_0.8fr_0.8fr_0.9fr_0.8fr_0.7fr]'
+const GRID = 'grid-cols-[1.2fr_0.8fr_1.1fr_0.8fr_0.8fr_0.9fr_0.8fr_0.7fr]'
 
 export default function PriceTable({ records = [] }) {
   const [sortKey, setSortKey] = useState('modalPrice')
